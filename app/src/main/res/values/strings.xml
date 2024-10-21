@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Reflect</string>
+    <string name="add_reflect">New Reflect</string>
+    <string name="add">Add</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="reminder">Reminder</string>
+</resources>
