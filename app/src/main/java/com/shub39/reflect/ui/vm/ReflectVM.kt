@@ -20,10 +20,10 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class ReflectVM(
-    application: Application
+    application: Application,
+    db: ReflectDatabase
 ): AndroidViewModel(application) {
 
-    private val db = ReflectDatabase.getDatabase(application)
     private val dao = db.reflectDao()
 
     private val _homeState = MutableStateFlow(HomePageState())
