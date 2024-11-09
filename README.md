@@ -11,7 +11,8 @@ Currently the following features are planned:
 - [ ] Notification reminders
 - [ ] Customisations
 
-If you are interested in collaborating, discussing or becoming a beta tester, ping me at telegram or discord `@shub39`
+> [!NOTE]
+> If you are interested in collaborating, discussing or becoming a beta tester, ping me at telegram or discord `@shub39`
 
 ## ✨ Screenshots ✨
 
