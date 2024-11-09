@@ -1,11 +1,11 @@
 package com.shub39.reflect.ui.vm
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shub39.reflect.data.Reflect
 import com.shub39.reflect.data.ReflectDatabase
 import com.shub39.reflect.ui.page.reflect_list.HomePageState
+import com.shub39.reflect.ui.page.reflect_list.getFilePaths
 import com.shub39.reflect.ui.page.reflect_list.toReflectUi
 import com.shub39.reflect.ui.page.reflect_page.ReflectPageAction
 import com.shub39.reflect.ui.page.reflect_page.ReflectPageState
@@ -20,9 +20,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class ReflectVM(
-    application: Application,
     db: ReflectDatabase
-): AndroidViewModel(application) {
+) : ViewModel() {
 
     private val dao = db.reflectDao()
 
@@ -45,11 +44,21 @@ class ReflectVM(
         )
 
     fun onReflectAction(action: ReflectPageAction) {
-        when (action) {
-            is ReflectPageAction.OnDelete -> {}
-            is ReflectPageAction.OnEdit -> {}
-            is ReflectPageAction.OnPlay -> {}
-            is ReflectPageAction.OnAdd -> {}
+        viewModelScope.launch {
+            when (action) {
+                is ReflectPageAction.OnDelete -> {
+
+                }
+
+                is ReflectPageAction.OnEdit -> {
+                    updateReflect(action.reflect)
+                    getReflects()
+                    changeReflect(action.reflect.id)
+                }
+
+                is ReflectPageAction.OnPlay -> {}
+                is ReflectPageAction.OnAdd -> {}
+            }
         }
     }
 
@@ -74,38 +83,34 @@ class ReflectVM(
 
     fun changeReflect(id: Long) {
         viewModelScope.launch {
+            val ref = dao.getReflectById(id)
+
             _reflectState.update {
                 it.copy(
-                    reflect = dao.getReflectById(id)
+                    reflect = ref,
+                    filePaths = getFilePaths(ref.title, 0)
                 )
             }
         }
     }
 
-    private fun getReflects() {
-        viewModelScope.launch {
-            _homeState.update {
-                it.copy(
-                    reflects = dao.getAllReflects().map { it.toReflectUi() }.sortedBy { it.lastUpdated }
-                )
-            }
+    private suspend fun getReflects() {
+        _homeState.update {
+            it.copy(
+                reflects = dao.getAllReflects().map { it.toReflectUi() }
+                    .sortedBy { it.lastUpdated }
+            )
         }
     }
 
-    private fun updateReflect(reflect: Reflect) {
-        viewModelScope.launch {
-            dao.updateReflect(reflect)
-
-            getReflects()
-        }
+    private suspend fun updateReflect(reflect: Reflect) {
+        dao.updateReflect(reflect)
+        getReflects()
     }
 
-    private fun deleteReflect(reflect: Reflect) {
-        viewModelScope.launch {
-            dao.deleteReflect(reflect)
-
-            getReflects()
-        }
+    private suspend fun deleteReflect(reflect: Reflect) {
+        dao.deleteReflect(reflect)
+        getReflects()
     }
 
 }

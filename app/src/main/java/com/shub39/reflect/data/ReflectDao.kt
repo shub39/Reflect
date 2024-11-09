@@ -14,7 +14,7 @@ interface ReflectDao {
     suspend fun getAllReflects(): List<Reflect>
 
     @Query("SELECT * FROM reflect WHERE id = :id")
-    suspend fun getReflectById(id: Long): Reflect?
+    suspend fun getReflectById(id: Long): Reflect
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReflect(reflect: Reflect)

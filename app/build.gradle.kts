@@ -10,7 +10,7 @@ val appName = "Reflect"
 
 android {
     namespace = "com.shub39.reflect"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.shub39.reflect"
@@ -93,8 +93,7 @@ dependencies {
 
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.coil.compose)
-    implementation(libs.coil)
+    implementation(libs.landscapist.coil)
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.room.compiler)
@@ -108,7 +107,6 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.colorpicker.compose)
     implementation(libs.androidx.camera.camera2)
-
 }
 
 java {

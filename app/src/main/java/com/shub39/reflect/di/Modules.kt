@@ -9,5 +9,5 @@ import org.koin.dsl.module
 val modules = module {
     single { provideImageLoader(get()) }
     single { ReflectDatabase.getDatabase(get()) }
-    viewModel { ReflectVM(get(), get()) }
+    viewModel { ReflectVM(get()) }
 }

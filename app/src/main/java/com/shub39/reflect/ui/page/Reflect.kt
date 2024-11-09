@@ -1,15 +1,13 @@
 package com.shub39.reflect.ui.page
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -51,29 +49,20 @@ fun Reflect(
 
     Scaffold(
         topBar = {
-            AnimatedVisibility(
-                visible = currentDestination?.route == HomePage::class.qualifiedName,
-                enter = expandVertically(),
-                exit = shrinkVertically()
-            ) {
-                LargeTopAppBar(
-                    title = { Text(stringResource(R.string.app_name)) }
-                )
-            }
-
-            AnimatedVisibility(
-                visible = currentDestination?.route != HomePage::class.qualifiedName,
-                enter = expandVertically(),
-                exit = shrinkVertically()
-            ) {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.app_name)) }
-                )
-            }
+            TopAppBar(
+                title = {
+                    AnimatedContent(
+                        currentDestination?.route, label = "TopBar",
+                    ) { when (it) {
+                        HomePage.ROUTE -> Text(stringResource(R.string.app_name))
+                        else -> Text(reflectPageState.reflect?.title ?: "")
+                    } }
+                }
+            )
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = currentDestination?.route == HomePage::class.qualifiedName,
+                visible = currentDestination?.route == HomePage.ROUTE,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
@@ -93,19 +82,19 @@ fun Reflect(
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
-            startDestination = HomePage
+            startDestination = HomePage.ROUTE
         ) {
-            composable<HomePage> {
+            composable(HomePage.ROUTE) {
                 ReflectList(
                     state = homeState,
                     onNavigate = {
                         vm.changeReflect(it)
-                        navController.navigate(ReflectPage)
+                        navController.navigate(ReflectPage.ROUTE)
                     }
                 )
             }
 
-            composable<ReflectPage> {
+            composable(ReflectPage.ROUTE) {
                 ReflectPage(
                     state = reflectPageState,
                     action = vm::onReflectAction
@@ -125,7 +114,11 @@ fun Reflect(
 }
 
 @Serializable
-object HomePage
+object HomePage {
+    const val ROUTE = "home"
+}
 
 @Serializable
-object ReflectPage
+object ReflectPage {
+    const val ROUTE = "reflect"
+}

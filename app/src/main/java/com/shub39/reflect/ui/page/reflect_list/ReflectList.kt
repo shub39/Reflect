@@ -4,7 +4,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,11 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.time.LocalDate
 import com.shub39.reflect.R
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -78,23 +74,25 @@ fun ReflectList(
 
                         Spacer(modifier = Modifier.padding(4.dp))
 
-                        FlowRow(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
+                        if (it.reminder != null) {
                             AssistChip(
                                 onClick = {},
-                                label = { Text(text = it.start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))) },
-                                leadingIcon = { Icon(painter = painterResource(R.drawable.round_flag_24), contentDescription = null) }
+                                label = {
+                                    Text(
+                                        text = it.reminder.format(
+                                            DateTimeFormatter.ofPattern("hh:mm a")
+                                        )
+                                    )
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.round_access_alarm_24),
+                                        contentDescription = null
+                                    )
+                                }
                             )
-
-                            if (it.reminder != null) {
-                                AssistChip(
-                                    onClick = {},
-                                    label = { Text(text = it.reminder.format(DateTimeFormatter.ofPattern("hh:mm a"))) },
-                                    leadingIcon = { Icon(painter = painterResource(R.drawable.round_access_alarm_24), contentDescription = null) }
-                                )
-                            }
                         }
+
                     }
 
                     IconButton(
@@ -112,34 +110,5 @@ fun ReflectList(
         }
 
     }
-
-}
-
-@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
-@Composable
-fun HomePagePreview() {
-
-    val testState = HomePageState(
-        reflects = listOf(
-            ReflectUI(
-                id = 1,
-                title = "Plant",
-                description = "The pea plant",
-                start = LocalDate.now()
-            ),
-            ReflectUI(
-                id = 2,
-                title = "Selfies",
-                description = "One selfie a day",
-                reminder = LocalTime.now(),
-                start = LocalDate.now()
-            )
-        )
-    )
-
-    ReflectList(
-        state = testState,
-        onNavigate = {}
-    )
 
 }

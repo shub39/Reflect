@@ -1,4 +1,4 @@
-package com.shub39.reflect.ui.page.component
+package com.shub39.reflect.ui.page.reflect_page
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -17,9 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
-import com.shub39.reflect.R
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -28,22 +30,27 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.shub39.reflect.R
 import com.shub39.reflect.ui.page.isValidTitle
 import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReflectAddDialog(
-    onAdd: (String, String, LocalTime?) -> Unit,
+fun ReflectEditDialog(
+    state: ReflectPageState,
+    onEdit: (String, String, LocalTime?) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val timePickerState = rememberTimePickerState()
+    val timePickerState = rememberTimePickerState(
+        initialHour = state.reflect?.reminder?.hour ?: 0,
+        initialMinute = state.reflect?.reminder?.minute ?: 0
+    )
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var addReminder by remember { mutableStateOf(false) }
+    var title by remember { mutableStateOf(state.reflect?.title!!) }
+    var description by remember { mutableStateOf(state.reflect?.description!!) }
+    var addReminder by remember { mutableStateOf(state.reflect?.reminder != null) }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -63,7 +70,7 @@ fun ReflectAddDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.add_reflect),
+                    text = stringResource(R.string.edit_reflect),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -115,7 +122,7 @@ fun ReflectAddDialog(
 
                 Button(
                     onClick = {
-                        onAdd(
+                        onEdit(
                             title,
                             description,
                             if (addReminder) LocalTime.of(

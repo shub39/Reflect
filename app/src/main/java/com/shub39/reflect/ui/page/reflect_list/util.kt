@@ -12,7 +12,7 @@ fun Reflect.toReflectUi(): ReflectUI {
         description = description,
         start = start,
         reminder = reminder,
-        preview = get10FilePaths(title),
+        preview = getFilePaths(title),
     )
 }
 
@@ -27,27 +27,50 @@ fun ReflectUI.toReflect(): Reflect {
 }
 
 // Creates folders if they not exist
-private fun get10FilePaths(
+fun getFilePaths(
     subFolderName: String,
+    no: Int = 10,
 ): List<String> {
 
     val pictureDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Reflect")
 
     if (!pictureDir.exists()) {
         pictureDir.mkdirs()
-        Log.d("Reflect Utils", "Reflect folder created")
     }
 
     val subFolder = File(pictureDir, subFolderName)
 
     if (!subFolder.exists() || !subFolder.isDirectory) {
         subFolder.mkdirs()
-        Log.d("Reflect Utils", "Subfolder created at ${subFolder.absolutePath}")
         return emptyList()
     }
 
-    val sortedFiles = subFolder.listFiles()?.take(10)?.sortedByDescending { it.lastModified() } ?: emptyList()
-    Log.d("Reflect Utils", "Returning ${sortedFiles.size} files from ${subFolder.absolutePath}")
+    val sortedFiles = if (no > 0) {
+        subFolder.listFiles()?.take(no)?.sortedByDescending { it.lastModified() } ?: emptyList()
+    } else {
+        subFolder.listFiles()?.sortedByDescending { it.lastModified() } ?: emptyList()
+    }
+
+    Log.d("Reflect", "getFilePaths: $sortedFiles")
     return sortedFiles.map { it.absolutePath }
 
+}
+
+fun changeFolderName(
+    previousName: String,
+    name: String,
+) {
+    val pictureDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Reflect")
+
+    if (!pictureDir.exists()) {
+        pictureDir.mkdirs()
+    }
+
+    val subFolder = File(pictureDir, previousName)
+
+    if (!subFolder.exists() || !subFolder.isDirectory) {
+        File(pictureDir, name).mkdirs()
+    } else {
+        subFolder.renameTo(File(pictureDir, name))
+    }
 }
