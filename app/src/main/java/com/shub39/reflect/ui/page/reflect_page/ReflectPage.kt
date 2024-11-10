@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
 import com.shub39.reflect.data.Reflect
-import com.shub39.reflect.ui.page.reflect_list.changeFolderName
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -196,18 +195,13 @@ fun ReflectPage(
             state = state,
             onDismiss = { editDialog = false },
             onEdit = { title, description, time ->
-                changeFolderName(
-                    previousName = state.reflect.title,
-                    name = title
-                )
-
                 action(
                     ReflectPageAction.OnEdit(
                         Reflect(
                             id = state.reflect.id,
                             title = title,
                             description = description,
-                            reminder = state.reflect.reminder,
+                            reminder = time,
                             start = state.reflect.start,
                             lastUpdated = state.reflect.lastUpdated
                         )

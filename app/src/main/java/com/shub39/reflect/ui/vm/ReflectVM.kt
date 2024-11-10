@@ -88,7 +88,7 @@ class ReflectVM(
             _reflectState.update {
                 it.copy(
                     reflect = ref,
-                    filePaths = getFilePaths(ref.title, 0)
+                    filePaths = getFilePaths(ref.id.toString(), 0)
                 )
             }
         }

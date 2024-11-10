@@ -12,7 +12,7 @@ fun Reflect.toReflectUi(): ReflectUI {
         description = description,
         start = start,
         reminder = reminder,
-        preview = getFilePaths(title),
+        preview = getFilePaths(id.toString()),
     )
 }
 
@@ -46,7 +46,7 @@ fun getFilePaths(
     }
 
     val sortedFiles = if (no > 0) {
-        subFolder.listFiles()?.take(no)?.sortedByDescending { it.lastModified() } ?: emptyList()
+        subFolder.listFiles()?.takeLast(no)?.sortedByDescending { it.lastModified() } ?: emptyList()
     } else {
         subFolder.listFiles()?.sortedByDescending { it.lastModified() } ?: emptyList()
     }
@@ -54,23 +54,4 @@ fun getFilePaths(
     Log.d("Reflect", "getFilePaths: $sortedFiles")
     return sortedFiles.map { it.absolutePath }
 
-}
-
-fun changeFolderName(
-    previousName: String,
-    name: String,
-) {
-    val pictureDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Reflect")
-
-    if (!pictureDir.exists()) {
-        pictureDir.mkdirs()
-    }
-
-    val subFolder = File(pictureDir, previousName)
-
-    if (!subFolder.exists() || !subFolder.isDirectory) {
-        File(pictureDir, name).mkdirs()
-    } else {
-        subFolder.renameTo(File(pictureDir, name))
-    }
 }

@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,8 +44,8 @@ fun ReflectList(
     ) {
         items(state.reflects, key = { it.id }) {
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { onNavigate(it.id) }
             ) {
                 Row(
                     modifier = Modifier
@@ -55,8 +55,7 @@ fun ReflectList(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
                             text = it.title,
@@ -93,17 +92,17 @@ fun ReflectList(
                             )
                         }
 
-                    }
+                        Spacer(modifier = Modifier.padding(4.dp))
 
-                    IconButton(
-                        onClick = {
-                            onNavigate(it.id)
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            items(it.preview) { uri ->
+                                PreviewImage(uri)
+                            }
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.round_arrow_forward_24),
-                            contentDescription = null
-                        )
+
                     }
                 }
             }
