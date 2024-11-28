@@ -5,7 +5,7 @@ import com.shub39.reflect.reflect.presentation.ReflectVM
 import com.shub39.reflect.reflect.data.repository.ReflectRepository
 import com.shub39.reflect.reflect.domain.ReflectRepo
 import com.shub39.reflect.reflect.domain.Video
-import com.shub39.reflect.reflect.data.video.FfmpegInit
+import com.shub39.reflect.reflect.data.video.FFmpegHandler
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
@@ -21,7 +21,7 @@ val modules = module {
     singleOf(::ReflectRepository).bind<ReflectRepo>()
 
     //video stuff
-    singleOf(::FfmpegInit).bind<Video>()
+    singleOf(::FFmpegHandler).bind<Video>()
 
     // viewmodel
     viewModelOf(::ReflectVM)

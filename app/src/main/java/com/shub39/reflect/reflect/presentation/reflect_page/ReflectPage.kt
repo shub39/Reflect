@@ -1,5 +1,6 @@
 package com.shub39.reflect.reflect.presentation.reflect_page
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.animation.AnimatedVisibility
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -29,6 +31,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,8 +43,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ReflectPage(
     state: ReflectPageState,
-    action: (ReflectPageAction) -> Unit
+    action: (ReflectPageAction) -> Unit,
 ) {
+    val context = LocalContext.current
     val listState = rememberLazyGridState()
     val derivedState = remember { derivedStateOf { listState.firstVisibleItemIndex } }
 
@@ -50,6 +54,15 @@ fun ReflectPage(
     val pickMedia = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
         if (uri != null) {
             action(ReflectPageAction.OnAdd(uri))
+        }
+    }
+
+    LaunchedEffect(state) {
+        if (state.outputPath != null) {
+            Toast.makeText(context, "Saved in ${state.outputPath}", Toast.LENGTH_LONG).show()
+        }
+        if (state.error != null) {
+            Toast.makeText(context, context.getString(state.error), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -116,9 +129,7 @@ fun ReflectPage(
                     label = {
                         Text(
                             text = state.reflect.lastUpdated.format(
-                                DateTimeFormatter.ofPattern(
-                                    "dd/MM/yy"
-                                )
+                                DateTimeFormatter.ofPattern("dd/MM/yy")
                             )
                         )
                     },
@@ -176,12 +187,22 @@ fun ReflectPage(
                             }
 
                             FloatingActionButton(
-                                onClick = { action(ReflectPageAction.OnPlay) },
+                                onClick = {
+                                    if (!state.isGenerating) {
+                                        action(ReflectPageAction.OnPlay)
+                                    }
+                                },
                             ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.round_play_arrow_24),
-                                    contentDescription = null
-                                )
+                                if (!state.isGenerating) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.round_play_arrow_24),
+                                        contentDescription = null
+                                    )
+                                } else {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
                             }
                         }
                     }

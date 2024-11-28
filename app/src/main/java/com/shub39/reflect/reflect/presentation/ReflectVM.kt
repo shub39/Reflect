@@ -2,6 +2,8 @@ package com.shub39.reflect.reflect.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shub39.reflect.core.domain.Result
+import com.shub39.reflect.core.presentation.errorToStringRes
 import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.domain.ReflectRepo
 import com.shub39.reflect.reflect.domain.Video
@@ -61,6 +63,7 @@ class ReflectVM(
             is ReflectPageAction.OnPlay -> {
                 generateVideo()
             }
+
             is ReflectPageAction.OnAdd -> {}
         }
     }
@@ -124,10 +127,33 @@ class ReflectVM(
         val state = reflectState.value
 
         if (state.filePaths.isNotEmpty() || state.reflect != null) {
+            _reflectState.update { it.copy(isGenerating = true) }
             val filePaths = state.filePaths
             val name = state.reflect?.title!!
 
-            video.createVideo(name, filePaths)
+            video.createVideo(name, filePaths) { result ->
+                when (result) {
+                    is Result.Error -> {
+                        _reflectState.update {
+                            it.copy(
+                                isGenerating = false,
+                                outputPath = null,
+                                error = errorToStringRes(result.error)
+                            )
+                        }
+                    }
+
+                    is Result.Success -> {
+                        _reflectState.update {
+                            it.copy(
+                                isGenerating = false,
+                                outputPath = result.data,
+                                error = null
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
