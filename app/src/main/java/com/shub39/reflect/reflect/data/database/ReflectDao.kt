@@ -19,7 +19,7 @@ interface ReflectDao {
     fun getReflects(): Flow<List<ReflectEntity>>
 
     @Upsert
-    fun upsertReflect(reflect: ReflectEntity)
+     suspend fun upsertReflect(reflect: ReflectEntity)
 
     @Query("SELECT * FROM reflect WHERE id = :id")
     suspend fun getReflectById(id: Long): ReflectEntity

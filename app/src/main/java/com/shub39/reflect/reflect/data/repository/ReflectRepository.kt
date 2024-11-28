@@ -24,4 +24,8 @@ class ReflectRepository(
     override suspend fun deleteReflect(reflect: Reflect) {
         dao.deleteReflect(reflect.toReflectEntity())
     }
+
+    override suspend fun getReflect(id: Long): Reflect {
+        return dao.getReflectById(id).toReflect()
+    }
 }

@@ -106,7 +106,7 @@ dependencies {
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.colorpicker.compose)
-    implementation(libs.androidx.camera.camera2)
+    implementation(libs.ffmpeg.kit.full)
 }
 
 java {

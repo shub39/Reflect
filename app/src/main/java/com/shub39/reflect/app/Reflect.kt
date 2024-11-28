@@ -25,8 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.compose.currentBackStackEntryAsState
-import kotlinx.serialization.Serializable
+import androidx.navigation.compose.navigation
 import org.koin.androidx.compose.koinViewModel
 import com.shub39.reflect.R
 import com.shub39.reflect.reflect.presentation.ReflectVM
@@ -39,22 +38,26 @@ fun Reflect(
     vm: ReflectVM = koinViewModel()
 ) {
     val navController = rememberNavController()
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = currentBackStackEntry?.destination
+
+    val routes = listOf(
+        Routes.ReflectList,
+        Routes.ReflectPage
+    )
 
     val homeState by vm.homeState.collectAsStateWithLifecycle()
     val reflectPageState by vm.reflectState.collectAsStateWithLifecycle()
 
     var addReflectDialog by remember { mutableStateOf(false) }
+    var currentRoute by remember { mutableStateOf(routes[0]) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     AnimatedContent(
-                        currentDestination?.route, label = "TopBar",
+                        currentRoute, label = "TopBar",
                     ) { when (it) {
-                        HomePage.ROUTE -> Text(stringResource(R.string.app_name))
+                        Routes.ReflectList -> Text(stringResource(R.string.app_name))
                         else -> Text(reflectPageState.reflect?.title ?: "")
                     } }
                 }
@@ -62,7 +65,7 @@ fun Reflect(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = currentDestination?.route == HomePage.ROUTE,
+                visible = currentRoute == Routes.ReflectList,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
@@ -82,23 +85,31 @@ fun Reflect(
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
-            startDestination = HomePage.ROUTE
+            startDestination = Routes.ReflectGraph
         ) {
-            composable(HomePage.ROUTE) {
-                ReflectList(
-                    state = homeState,
-                    onNavigate = {
-                        vm.changeReflect(it)
-                        navController.navigate(ReflectPage.ROUTE)
-                    }
-                )
-            }
+            navigation<Routes.ReflectGraph>(
+                startDestination = Routes.ReflectList
+            ) {
+                composable<Routes.ReflectList> {
+                    currentRoute = routes[0]
 
-            composable(ReflectPage.ROUTE) {
-                ReflectPage(
-                    state = reflectPageState,
-                    action = vm::onReflectAction
-                )
+                    ReflectList(
+                        state = homeState,
+                        onNavigate = {
+                            navController.navigate(Routes.ReflectPage)
+                            vm.changeReflect(it)
+                        },
+                    )
+                }
+
+                composable<Routes.ReflectPage> {
+                    currentRoute = routes[1]
+
+                    ReflectPage(
+                        state = reflectPageState,
+                        action = vm::onReflectAction,
+                    )
+                }
             }
         }
 
@@ -111,14 +122,4 @@ fun Reflect(
         )
     }
 
-}
-
-@Serializable
-object HomePage {
-    const val ROUTE = "home"
-}
-
-@Serializable
-object ReflectPage {
-    const val ROUTE = "reflect"
 }

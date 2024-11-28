@@ -176,7 +176,7 @@ fun ReflectPage(
                             }
 
                             FloatingActionButton(
-                                onClick = {},
+                                onClick = { action(ReflectPageAction.OnPlay) },
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.round_play_arrow_24),

@@ -1,12 +1,11 @@
 [versions]
 agp = "8.7.2"
-cameraCamera2 = "1.5.0-alpha03"
-coilCompose = "2.7.0"
 colorpickerCompose = "1.1.2"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
-koinAndroidxCompose = "3.5.0"
-kotlin = "2.0.20"
+ffmpegKitFull = "6.0-2"
+koinAndroidxCompose = "4.0.0"
+kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,13 +14,12 @@ kotlinGradlePlugin = "2.0.0"
 landscapistCoil = "2.4.2"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.10.01"
-composeNavigation = "2.8.3"
+composeBom = "2024.11.00"
+composeNavigation = "2.8.4"
 roomRuntime = "2.6.1"
-serialization = "1.7.1"
+serialization = "1.7.3"
 
 [libraries]
-androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -34,6 +32,7 @@ androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "
 androidx-room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "roomRuntime" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomRuntime" }
 colorpicker-compose = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpickerCompose" }
+ffmpeg-kit-full = { module = "com.arthenica:ffmpeg-kit-full", version.ref = "ffmpegKitFull" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

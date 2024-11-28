@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.domain.ReflectRepo
+import com.shub39.reflect.reflect.domain.Video
 import com.shub39.reflect.reflect.presentation.reflect_list.HomePageState
 import com.shub39.reflect.reflect.presentation.reflect_list.getFilePaths
-import com.shub39.reflect.reflect.presentation.reflect_list.toReflect
 import com.shub39.reflect.reflect.presentation.reflect_list.toReflectUi
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPageAction
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPageState
@@ -25,6 +25,7 @@ import java.time.LocalTime
 
 class ReflectVM(
     private val repo: ReflectRepo,
+    private val video: Video
 ) : ViewModel() {
 
     private var savedJob: Job? = null
@@ -48,35 +49,31 @@ class ReflectVM(
         )
 
     fun onReflectAction(action: ReflectPageAction) {
-        viewModelScope.launch {
-            when (action) {
-                is ReflectPageAction.OnDelete -> {
+        when (action) {
+            is ReflectPageAction.OnDelete -> {
 
-                }
-
-                is ReflectPageAction.OnEdit -> {
-                    updateReflect(action.reflect)
-                    changeReflect(action.reflect.id)
-                }
-
-                is ReflectPageAction.OnPlay -> {}
-                is ReflectPageAction.OnAdd -> {}
             }
+
+            is ReflectPageAction.OnEdit -> {
+                updateReflect(action.reflect)
+            }
+
+            is ReflectPageAction.OnPlay -> {
+                generateVideo()
+            }
+            is ReflectPageAction.OnAdd -> {}
         }
     }
 
-    private fun getReflects() {
-        savedJob?.cancel()
-        savedJob = repo
-            .getReflects()
-            .onEach { reflects ->
-                _homeState.update { state ->
-                    state.copy(
-                        reflects = reflects.map { it.toReflectUi() }
-                    )
-                }
+    fun changeReflect(id: Long) {
+        viewModelScope.launch {
+            _reflectState.update {
+                it.copy(
+                    reflect = repo.getReflect(id),
+                    filePaths = getFilePaths(id.toString(), 0)
+                )
             }
-            .launchIn(viewModelScope)
+        }
     }
 
     fun addReflect(
@@ -96,27 +93,48 @@ class ReflectVM(
         }
     }
 
-    fun changeReflect(id: Long) {
-        viewModelScope.launch {
-            val ref = _homeState.value.reflects.find { it.id == id }?.toReflect()
-
-            if (ref != null) {
-                _reflectState.update {
-                    it.copy(
-                        reflect = ref,
-                        filePaths = getFilePaths(ref.id.toString(), 0)
+    private fun getReflects() {
+        savedJob?.cancel()
+        savedJob = repo
+            .getReflects()
+            .onEach { reflects ->
+                _homeState.update { state ->
+                    state.copy(
+                        reflects = reflects.map { it.toReflectUi() }
                     )
                 }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun updateReflect(reflect: Reflect) {
+        viewModelScope.launch {
+            repo.upsertReflect(reflect)
+
+            _reflectState.update {
+                it.copy(
+                    reflect = reflect,
+                    filePaths = getFilePaths(reflect.id.toString(), 0)
+                )
             }
         }
     }
 
-    private suspend fun updateReflect(reflect: Reflect) {
-        repo.upsertReflect(reflect)
+    private fun generateVideo() {
+        val state = reflectState.value
+
+        if (state.filePaths.isNotEmpty() || state.reflect != null) {
+            val filePaths = state.filePaths
+            val name = state.reflect?.title!!
+
+            video.createVideo(name, filePaths)
+        }
     }
 
-    private suspend fun deleteReflect(reflect: Reflect) {
-        repo.deleteReflect(reflect)
+    private fun deleteReflect(reflect: Reflect) {
+        viewModelScope.launch {
+            repo.deleteReflect(reflect)
+        }
     }
 
 }

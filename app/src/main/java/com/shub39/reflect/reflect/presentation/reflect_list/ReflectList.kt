@@ -3,7 +3,6 @@ package com.shub39.reflect.reflect.presentation.reflect_list
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,13 +26,11 @@ import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReflectList(
     state: HomePageState,
     onNavigate: (id: Long) -> Unit
 ) {
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
