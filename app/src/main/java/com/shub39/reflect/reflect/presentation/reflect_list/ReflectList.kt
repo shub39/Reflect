@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
+import com.shub39.reflect.reflect.presentation.reflect_list.component.PreviewImage
 import java.time.format.DateTimeFormatter
 
 @Composable

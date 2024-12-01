@@ -1,8 +1,6 @@
 package com.shub39.reflect.reflect.presentation.reflect_page
 
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -37,6 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
 import com.shub39.reflect.reflect.domain.Reflect
+import com.shub39.reflect.reflect.presentation.reflect_page.component.PageImage
+import com.shub39.reflect.reflect.presentation.reflect_page.component.ReflectEditDialog
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -50,12 +50,6 @@ fun ReflectPage(
     val derivedState = remember { derivedStateOf { listState.firstVisibleItemIndex } }
 
     var editDialog by remember { mutableStateOf(false) }
-
-    val pickMedia = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
-        if (uri != null) {
-            action(ReflectPageAction.OnAdd(uri))
-        }
-    }
 
     LaunchedEffect(state) {
         if (state.outputPath != null) {

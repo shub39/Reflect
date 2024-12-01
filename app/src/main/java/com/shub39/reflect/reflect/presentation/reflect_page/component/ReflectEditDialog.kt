@@ -1,4 +1,4 @@
-package com.shub39.reflect.reflect.presentation.reflect_page
+package com.shub39.reflect.reflect.presentation.reflect_page.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
 import com.shub39.reflect.reflect.presentation.isValidTitle
+import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPageState
 import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)

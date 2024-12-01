@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.2"
+cameraCamera2 = "1.5.0-alpha03"
 colorpickerCompose = "1.1.2"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
@@ -11,6 +12,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinGradlePlugin = "2.0.0"
+ksp = "2.0.21-1.0.28"
 landscapistCoil = "2.4.2"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
@@ -20,6 +22,9 @@ roomRuntime = "2.6.1"
 serialization = "1.7.3"
 
 [libraries]
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCamera2" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCamera2" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -53,6 +58,7 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
 
 [plugins]
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

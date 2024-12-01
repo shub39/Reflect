@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.ksp)
 }
 
 val appName = "Reflect"
@@ -107,6 +107,9 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.colorpicker.compose)
     implementation(libs.ffmpeg.kit.full)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.lifecycle)
 }
 
 java {

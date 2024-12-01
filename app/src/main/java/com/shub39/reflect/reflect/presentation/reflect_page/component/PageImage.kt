@@ -1,4 +1,4 @@
-package com.shub39.reflect.reflect.presentation.reflect_list
+package com.shub39.reflect.reflect.presentation.reflect_page.component
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -12,15 +12,18 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun PreviewImage(uri: String) {
+fun PageImage(
+    uri: String,
+    bounds: Int
+) {
     CoilImage(
         imageModel = { uri },
         imageOptions = ImageOptions(
-            alignment = Alignment.Center,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.Center
         ),
         modifier = Modifier
-            .clip(MaterialTheme.shapes.small)
-            .size(height = 100.dp, width = 50.dp)
+            .clip(MaterialTheme.shapes.large)
+            .size(bounds.dp)
     )
 }

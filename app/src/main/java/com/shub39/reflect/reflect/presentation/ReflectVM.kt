@@ -64,7 +64,8 @@ class ReflectVM(
                 generateVideo()
             }
 
-            is ReflectPageAction.OnAdd -> {}
+            is ReflectPageAction.OnAdd -> {
+            }
         }
     }
 
