@@ -7,7 +7,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.shub39.reflect.R
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 
@@ -22,6 +24,7 @@ fun PageImage(
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center
         ),
+        previewPlaceholder = painterResource(R.drawable.round_landscape_24),
         modifier = Modifier
             .clip(MaterialTheme.shapes.large)
             .size(bounds.dp)

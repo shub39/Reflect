@@ -27,7 +27,7 @@ import java.time.LocalTime
 
 class ReflectVM(
     private val repo: ReflectRepo,
-    private val video: Video
+    private val video: Video,
 ) : ViewModel() {
 
     private var savedJob: Job? = null
@@ -61,10 +61,15 @@ class ReflectVM(
             }
 
             is ReflectPageAction.OnPlay -> {
-                generateVideo()
+                // generateVideo()
             }
 
             is ReflectPageAction.OnAdd -> {
+                _reflectState.update {
+                    it.copy(
+                        filePaths = getFilePaths(action.id.toString(), 0)
+                    )
+                }
             }
         }
     }

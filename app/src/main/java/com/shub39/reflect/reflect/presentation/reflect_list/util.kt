@@ -46,9 +46,9 @@ fun getFilePaths(
     }
 
     val sortedFiles = if (no > 0) {
-        subFolder.listFiles()?.takeLast(no)?.sortedByDescending { it.lastModified() } ?: emptyList()
+        subFolder.listFiles()?.takeLast(no)?.sortedByDescending { it.name } ?: emptyList()
     } else {
-        subFolder.listFiles()?.sortedByDescending { it.lastModified() } ?: emptyList()
+        subFolder.listFiles()?.sortedByDescending { it.name } ?: emptyList()
     }
 
     Log.d("Reflect", "getFilePaths: $sortedFiles")

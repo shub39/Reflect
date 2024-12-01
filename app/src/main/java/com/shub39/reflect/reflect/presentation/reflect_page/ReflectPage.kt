@@ -1,6 +1,10 @@
 package com.shub39.reflect.reflect.presentation.reflect_page
 
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,11 +36,13 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
 import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.presentation.reflect_page.component.PageImage
 import com.shub39.reflect.reflect.presentation.reflect_page.component.ReflectEditDialog
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -50,6 +56,7 @@ fun ReflectPage(
     val derivedState = remember { derivedStateOf { listState.firstVisibleItemIndex } }
 
     var editDialog by remember { mutableStateOf(false) }
+    var inputSelect by remember { mutableStateOf(false) }
 
     LaunchedEffect(state) {
         if (state.outputPath != null) {
@@ -61,6 +68,8 @@ fun ReflectPage(
     }
 
     if (state.reflect == null) {
+
+        // impossible case
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -69,7 +78,18 @@ fun ReflectPage(
                 strokeCap = StrokeCap.Round
             )
         }
+
     } else {
+        val pickMedia = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
+            if (uri != null) {
+                Log.d("ReflectPage", "Selected uri: $uri")
+                copyImage(uri, state.reflect.id, LocalDate.now(), context)
+                action(ReflectPageAction.OnAdd(state.reflect.id))
+            } else {
+                Log.d("ReflectPage", "No media selected")
+            }
+        }
+
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -83,6 +103,7 @@ fun ReflectPage(
                 textAlign = TextAlign.Center
             )
 
+            // Information Chips
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
@@ -158,15 +179,48 @@ fun ReflectPage(
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
+
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
+                            AnimatedVisibility(
+                                visible = inputSelect
+                            ) {
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    // camera button
+                                    FloatingActionButton(
+                                        onClick = {  }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.baseline_camera_alt_24),
+                                            contentDescription = null
+                                        )
+                                    }
+
+                                    // gallery button
+                                    FloatingActionButton(
+                                        onClick = { pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.round_landscape_24),
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
+                            }
+
                             FloatingActionButton(
-                                onClick = {}
+                                onClick = { inputSelect = !inputSelect }
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.round_add_24),
+                                    painter = when (inputSelect) {
+                                        true -> painterResource(R.drawable.round_close_24)
+                                        false -> painterResource(R.drawable.round_add_24)
+                                    },
                                     contentDescription = null
                                 )
                             }
@@ -226,4 +280,25 @@ fun ReflectPage(
         )
     }
 
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+fun ReflectPagePreview() {
+    ReflectPage(
+        state = ReflectPageState(
+            reflect = Reflect(
+                id = 1,
+                title = "A Test",
+                description = "A simple test for preview",
+                start = LocalDate.now(),
+                lastUpdated = LocalDate.now()
+            ),
+            filePaths = (0 .. 100).map { it.toString() },
+            isGenerating = false,
+            outputPath = null,
+            error = null
+        ),
+        action = {}
+    )
 }
