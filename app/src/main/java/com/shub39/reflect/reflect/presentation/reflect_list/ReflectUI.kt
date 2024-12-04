@@ -10,5 +10,5 @@ data class ReflectUI (
     val start: LocalDate,
     val reminder: LocalTime? = null,
     val lastUpdated: LocalDate = start,
-    val preview: List<String> = emptyList()
+    val preview: Map<LocalDate, String> = emptyMap()
 )

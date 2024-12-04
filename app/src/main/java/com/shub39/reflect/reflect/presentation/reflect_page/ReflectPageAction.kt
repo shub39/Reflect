@@ -6,5 +6,4 @@ sealed interface ReflectPageAction {
     data class OnEdit(val reflect: Reflect): ReflectPageAction
     data class OnDelete(val id: Long): ReflectPageAction
     data object OnPlay: ReflectPageAction
-    data class OnAdd(val id: Long): ReflectPageAction
 }

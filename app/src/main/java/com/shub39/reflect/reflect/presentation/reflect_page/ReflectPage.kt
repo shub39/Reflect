@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -25,6 +26,7 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,11 +37,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
 import com.shub39.reflect.reflect.domain.Reflect
+import com.shub39.reflect.reflect.presentation.reflect_page.component.AnalyticsSheet
 import com.shub39.reflect.reflect.presentation.reflect_page.component.PageImage
 import com.shub39.reflect.reflect.presentation.reflect_page.component.ReflectEditDialog
 import java.time.LocalDate
@@ -56,7 +61,29 @@ fun ReflectPage(
     val derivedState = remember { derivedStateOf { listState.firstVisibleItemIndex } }
 
     var editDialog by remember { mutableStateOf(false) }
-    var inputSelect by remember { mutableStateOf(false) }
+    var analyticsSheet by remember { mutableStateOf(false) }
+    var imageAddDate by remember { mutableStateOf<LocalDate?>(null) }
+
+    val pickMedia = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
+        if (uri != null && state.reflect != null) {
+            Log.d("ReflectPage", "Selected uri: $uri")
+
+            if (copyImage(uri, state.reflect.id, imageAddDate ?: LocalDate.now(), context)) {
+                action(
+                    ReflectPageAction.OnEdit(
+                        reflect = state.reflect.copy(
+                            lastUpdated = imageAddDate ?: LocalDate.now()
+                        )
+                    )
+                )
+            }
+
+            imageAddDate = null
+        } else {
+            Log.d("ReflectPage", "No media selected")
+            imageAddDate = null
+        }
+    }
 
     LaunchedEffect(state) {
         if (state.outputPath != null) {
@@ -80,16 +107,6 @@ fun ReflectPage(
         }
 
     } else {
-        val pickMedia = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
-            if (uri != null) {
-                Log.d("ReflectPage", "Selected uri: $uri")
-                copyImage(uri, state.reflect.id, LocalDate.now(), context)
-                action(ReflectPageAction.OnAdd(state.reflect.id))
-            } else {
-                Log.d("ReflectPage", "No media selected")
-            }
-        }
-
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -97,11 +114,37 @@ fun ReflectPage(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = state.reflect.description,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
-            )
+            Row (
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = state.reflect.title,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Text(
+                        text = state.reflect.description,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                IconButton(
+                    onClick = { analyticsSheet = true }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.round_analytics_24),
+                        contentDescription = null
+                    )
+                }
+            }
 
             // Information Chips
             FlowRow(
@@ -160,13 +203,25 @@ fun ReflectPage(
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
+                if (state.filePaths.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_pictures),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
                 LazyVerticalGrid(
                     state = listState,
                     columns = GridCells.Adaptive(150.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    items(state.filePaths) {
+                    items(state.filePaths.entries.toList()) {
                         PageImage(it, 200)
                     }
                 }
@@ -184,43 +239,17 @@ fun ReflectPage(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            AnimatedVisibility(
-                                visible = inputSelect
-                            ) {
-                                Row (
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    // camera button
-                                    FloatingActionButton(
-                                        onClick = {  }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.baseline_camera_alt_24),
-                                            contentDescription = null
-                                        )
-                                    }
-
-                                    // gallery button
-                                    FloatingActionButton(
-                                        onClick = { pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.round_landscape_24),
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
-                            }
-
                             FloatingActionButton(
-                                onClick = { inputSelect = !inputSelect }
+                                onClick = {
+                                    pickMedia.launch(
+                                        PickVisualMediaRequest(
+                                            PickVisualMedia.ImageOnly
+                                        )
+                                    )
+                                }
                             ) {
                                 Icon(
-                                    painter = when (inputSelect) {
-                                        true -> painterResource(R.drawable.round_close_24)
-                                        false -> painterResource(R.drawable.round_add_24)
-                                    },
+                                    painter = painterResource(R.drawable.round_add_24),
                                     contentDescription = null
                                 )
                             }
@@ -239,6 +268,8 @@ fun ReflectPage(
                                     if (!state.isGenerating) {
                                         action(ReflectPageAction.OnPlay)
                                     }
+
+                                    Toast.makeText(context, "Not implemented yet...", Toast.LENGTH_SHORT).show()
                                 },
                             ) {
                                 if (!state.isGenerating) {
@@ -280,25 +311,19 @@ fun ReflectPage(
         )
     }
 
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun ReflectPagePreview() {
-    ReflectPage(
-        state = ReflectPageState(
-            reflect = Reflect(
-                id = 1,
-                title = "A Test",
-                description = "A simple test for preview",
-                start = LocalDate.now(),
-                lastUpdated = LocalDate.now()
-            ),
-            filePaths = (0 .. 100).map { it.toString() },
-            isGenerating = false,
-            outputPath = null,
-            error = null
-        ),
-        action = {}
-    )
+    if (analyticsSheet) {
+        AnalyticsSheet(
+            dates = state.filePaths.keys.toList(),
+            onDismiss = { analyticsSheet = false },
+            onPick = {
+                imageAddDate = it
+                pickMedia.launch(
+                    PickVisualMediaRequest(
+                        PickVisualMedia.ImageOnly
+                    )
+                )
+                analyticsSheet = false
+            }
+        )
+    }
 }

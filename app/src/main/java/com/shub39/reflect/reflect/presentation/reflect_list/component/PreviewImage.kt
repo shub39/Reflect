@@ -10,11 +10,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
+import java.time.LocalDate
 
 @Composable
-fun PreviewImage(uri: String) {
+fun PreviewImage(data: Map.Entry<LocalDate, String>) {
     CoilImage(
-        imageModel = { uri },
+        imageModel = { data.value },
         imageOptions = ImageOptions(
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop

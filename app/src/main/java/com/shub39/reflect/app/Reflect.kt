@@ -1,17 +1,13 @@
 package com.shub39.reflect.app
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.navigation
 import org.koin.androidx.compose.koinViewModel
 import com.shub39.reflect.R
@@ -32,7 +27,6 @@ import com.shub39.reflect.reflect.presentation.ReflectVM
 import com.shub39.reflect.reflect.presentation.component.ReflectAddDialog
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Reflect(
     vm: ReflectVM = koinViewModel()
@@ -51,18 +45,6 @@ fun Reflect(
     var currentRoute by remember { mutableStateOf(routes[0]) }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    AnimatedContent(
-                        currentRoute, label = "TopBar",
-                    ) { when (it) {
-                        Routes.ReflectList -> Text(stringResource(R.string.app_name))
-                        else -> Text(reflectPageState.reflect?.title ?: "")
-                    } }
-                }
-            )
-        },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = currentRoute == Routes.ReflectList,

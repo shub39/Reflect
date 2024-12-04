@@ -7,4 +7,6 @@
     <string name="reminder">Reminder</string>
     <string name="edit_reflect">Edit Reflect</string>
     <string name="error_unknown">Unknown Error occurred</string>
+    <string name="no_pictures">No Pictures yet…</string>
+    <string name="days_clicked">Days Clicked</string>
 </resources>

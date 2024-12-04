@@ -14,98 +14,117 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
 import com.shub39.reflect.reflect.presentation.reflect_list.component.PreviewImage
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReflectList(
     state: HomePageState,
     onNavigate: (id: Long) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .animateContentSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier.fillMaxSize()
     ) {
-        items(state.reflects, key = { it.id }) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { onNavigate(it.id) }
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .animateContentSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(state.reflects, key = { it.id }) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onNavigate(it.id) }
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = it.title,
-                            style = MaterialTheme.typography.titleLarge,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-
-                        Text(
-                            text = it.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-
-                        Spacer(modifier = Modifier.padding(4.dp))
-
-                        if (it.reminder != null) {
-                            AssistChip(
-                                onClick = {},
-                                label = {
-                                    Text(
-                                        text = it.reminder.format(
-                                            DateTimeFormatter.ofPattern("hh:mm a")
-                                        )
-                                    )
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        painter = painterResource(R.drawable.round_access_alarm_24),
-                                        contentDescription = null
-                                    )
-                                }
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.padding(4.dp))
-
-                        LazyRow(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            items(it.preview) { uri ->
-                                PreviewImage(uri)
-                            }
-                        }
+                            Text(
+                                text = it.title,
+                                style = MaterialTheme.typography.titleLarge,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
 
+                            Text(
+                                text = it.description,
+                                style = MaterialTheme.typography.bodyMedium,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis
+                            )
+
+                            Spacer(modifier = Modifier.padding(4.dp))
+
+                            if (it.reminder != null) {
+                                AssistChip(
+                                    onClick = {},
+                                    label = {
+                                        Text(
+                                            text = it.reminder.format(
+                                                DateTimeFormatter.ofPattern("hh:mm a")
+                                            )
+                                        )
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.round_access_alarm_24),
+                                            contentDescription = null
+                                        )
+                                    }
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.padding(4.dp))
+
+                            LazyRow(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                            ) {
+                                items(it.preview.entries.toList()) { data ->
+                                    PreviewImage(data)
+                                }
+                            }
+
+                        }
                     }
                 }
             }
-        }
 
+        }
     }
 
 }

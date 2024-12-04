@@ -17,7 +17,7 @@ android {
         minSdk = 29
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.landscapist.coil)
+    implementation(libs.heatmaps)
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.room.compiler)
@@ -105,11 +106,8 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.colorpicker.compose)
     implementation(libs.ffmpeg.kit.full)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.lifecycle)
+
 }
 
 java {
