@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.domain.ReflectRepo
-import com.shub39.reflect.reflect.presentation.reflect_list.HomePageState
+import com.shub39.reflect.reflect.presentation.reflect_list.ReflectListAction
+import com.shub39.reflect.reflect.presentation.reflect_list.ReflectListState
 import com.shub39.reflect.reflect.presentation.reflect_list.toReflectUi
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPageAction
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPageState
@@ -18,8 +19,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalTime
 
 class ReflectVM(
     private val repo: ReflectRepo,
@@ -28,7 +27,7 @@ class ReflectVM(
 
     private var savedJob: Job? = null
 
-    private val _homeState = MutableStateFlow(HomePageState())
+    private val _homeState = MutableStateFlow(ReflectListState())
     private val _reflectState = MutableStateFlow(ReflectPageState())
 
     val homeState = _homeState.asStateFlow()
@@ -36,7 +35,7 @@ class ReflectVM(
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
-            HomePageState()
+            ReflectListState()
         )
 
     val reflectState = _reflectState.asStateFlow()
@@ -45,6 +44,18 @@ class ReflectVM(
             SharingStarted.WhileSubscribed(5000),
             ReflectPageState()
         )
+
+    fun onReflectListAction(action: ReflectListAction) {
+        when (action) {
+            is ReflectListAction.OnAddReflect -> {
+                addReflect(action.reflect)
+            }
+
+            is ReflectListAction.OnChangeReflect -> {
+                changeReflect(action.reflectId)
+            }
+        }
+    }
 
     fun onReflectAction(action: ReflectPageAction) {
         when (action) {
@@ -73,20 +84,11 @@ class ReflectVM(
         }
     }
 
-    fun addReflect(
-        title: String,
-        description: String,
-        reminder: LocalTime? = null
+    private fun addReflect(
+        reflect: Reflect
     ) {
         viewModelScope.launch {
-            repo.upsertReflect(
-                Reflect(
-                    title = title,
-                    description = description,
-                    reminder = reminder,
-                    start = LocalDate.now()
-                )
-            )
+            repo.upsertReflect(reflect)
         }
     }
 

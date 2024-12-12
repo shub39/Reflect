@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -26,7 +25,6 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -114,37 +112,21 @@ fun ReflectPage(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Row (
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = state.reflect.title,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
 
-                    Text(
-                        text = state.reflect.description,
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
+            Text(
+                text = state.reflect.title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
 
-                IconButton(
-                    onClick = { analyticsSheet = true }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.round_analytics_24),
-                        contentDescription = null
-                    )
-                }
-            }
+            Text(
+                text = state.reflect.description,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
+            )
 
             // Information Chips
             FlowRow(
@@ -269,7 +251,11 @@ fun ReflectPage(
                                         action(ReflectPageAction.OnPlay)
                                     }
 
-                                    Toast.makeText(context, "Not implemented yet...", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Not implemented yet...",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 },
                             ) {
                                 if (!state.isGenerating) {
@@ -282,6 +268,15 @@ fun ReflectPage(
                                         modifier = Modifier.size(24.dp)
                                     )
                                 }
+                            }
+
+                            FloatingActionButton(
+                                onClick = { analyticsSheet = true }
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.round_analytics_24),
+                                    contentDescription = null
+                                )
                             }
                         }
                     }

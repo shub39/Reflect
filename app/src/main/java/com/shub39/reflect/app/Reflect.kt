@@ -1,12 +1,6 @@
 package com.shub39.reflect.app
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,12 +13,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.navigation
 import org.koin.androidx.compose.koinViewModel
-import com.shub39.reflect.R
 import com.shub39.reflect.reflect.presentation.ReflectVM
-import com.shub39.reflect.reflect.presentation.component.ReflectAddDialog
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPage
 
 @Composable
@@ -33,36 +24,12 @@ fun Reflect(
 ) {
     val navController = rememberNavController()
 
-    val routes = listOf(
-        Routes.ReflectList,
-        Routes.ReflectPage
-    )
-
     val homeState by vm.homeState.collectAsStateWithLifecycle()
     val reflectPageState by vm.reflectState.collectAsStateWithLifecycle()
 
-    var addReflectDialog by remember { mutableStateOf(false) }
-    var currentRoute by remember { mutableStateOf(routes[0]) }
+    var currentRoute: Routes by remember { mutableStateOf(Routes.ReflectList) }
 
-    Scaffold(
-        floatingActionButton = {
-            AnimatedVisibility(
-                visible = currentRoute == Routes.ReflectList,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                FloatingActionButton(
-                    onClick = { addReflectDialog = true },
-                    shape = MaterialTheme.shapes.extraLarge
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.round_add_24),
-                        contentDescription = null
-                    )
-                }
-            }
-        }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
 
         NavHost(
             navController = navController,
@@ -73,19 +40,19 @@ fun Reflect(
                 startDestination = Routes.ReflectList
             ) {
                 composable<Routes.ReflectList> {
-                    currentRoute = routes[0]
+                    currentRoute = Routes.ReflectList
 
                     ReflectList(
                         state = homeState,
                         onNavigate = {
                             navController.navigate(Routes.ReflectPage)
-                            vm.changeReflect(it)
                         },
+                        action = vm::onReflectListAction
                     )
                 }
 
                 composable<Routes.ReflectPage> {
-                    currentRoute = routes[1]
+                    currentRoute = Routes.ReflectPage
 
                     ReflectPage(
                         state = reflectPageState,
@@ -96,12 +63,4 @@ fun Reflect(
         }
 
     }
-
-    if (addReflectDialog) {
-        ReflectAddDialog(
-            onAdd = vm::addReflect,
-            onDismiss = { addReflectDialog = false }
-        )
-    }
-
 }

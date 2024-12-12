@@ -1,10 +1,10 @@
-package com.shub39.reflect.reflect.presentation.component
+package com.shub39.reflect.reflect.presentation.reflect_list.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -28,13 +28,15 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.presentation.isValidTitle
+import java.time.LocalDate
 import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReflectAddDialog(
-    onAdd: (String, String, LocalTime?) -> Unit,
+    onAdd: (Reflect) -> Unit,
     onDismiss: () -> Unit
 ) {
     val timePickerState = rememberTimePickerState()
@@ -54,7 +56,6 @@ fun ReflectAddDialog(
         onDismissRequest = onDismiss,
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.extraLarge
         ) {
             Column(
@@ -73,7 +74,6 @@ fun ReflectAddDialog(
                     onValueChange = { title = it },
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
-                        .fillMaxWidth()
                         .focusRequester(focusRequester),
                     singleLine = true,
                     label = { Text(stringResource(R.string.title)) }
@@ -83,13 +83,11 @@ fun ReflectAddDialog(
                     value = description,
                     onValueChange = { description = it },
                     shape = MaterialTheme.shapes.large,
-                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     label = { Text(stringResource(R.string.description)) }
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -97,6 +95,8 @@ fun ReflectAddDialog(
                         text = stringResource(R.string.reminder),
                         style = MaterialTheme.typography.bodyLarge
                     )
+
+                    Spacer(Modifier.padding(16.dp))
 
                     Switch(
                         checked = addReminder,
@@ -116,17 +116,19 @@ fun ReflectAddDialog(
                 Button(
                     onClick = {
                         onAdd(
-                            title,
-                            description,
-                            if (addReminder) LocalTime.of(
-                                timePickerState.hour,
-                                timePickerState.minute
-                            ) else null
+                            Reflect(
+                                title = title,
+                                description = description,
+                                start = LocalDate.now(),
+                                reminder = if (addReminder) LocalTime.of(
+                                    timePickerState.hour,
+                                    timePickerState.minute
+                                ) else null
+                            )
                         )
 
                         onDismiss()
                     },
-                    modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.extraLarge,
                     enabled = isValidTitle(title) && description.isNotBlank() && description.length < 50
                 ) {
