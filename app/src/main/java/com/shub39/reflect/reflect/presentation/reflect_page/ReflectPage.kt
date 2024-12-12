@@ -1,5 +1,6 @@
 package com.shub39.reflect.reflect.presentation.reflect_page
 
+import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -23,10 +24,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -39,16 +43,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.shub39.reflect.R
+import com.shub39.reflect.core.presentation.theme.ReflectTheme
 import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.presentation.reflect_page.component.AnalyticsSheet
 import com.shub39.reflect.reflect.presentation.reflect_page.component.PageImage
 import com.shub39.reflect.reflect.presentation.reflect_page.component.ReflectEditDialog
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ReflectPage(
     state: ReflectPageState,
@@ -112,21 +120,21 @@ fun ReflectPage(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            TopAppBar(
+                title = {
+                    Column {
+                        Text(state.reflect.title)
 
-            Text(
-                text = state.reflect.title,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                        Text(
+                            text = state.reflect.description,
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
             )
 
-            Text(
-                text = state.reflect.description,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
 
             // Information Chips
             FlowRow(
@@ -320,5 +328,35 @@ fun ReflectPage(
                 analyticsSheet = false
             }
         )
+    }
+}
+
+@Preview(
+    showSystemUi = true, showBackground = true, wallpaper = Wallpapers.RED_DOMINATED_EXAMPLE,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
+    device = "spec:width=673dp,height=841dp"
+)
+@Composable
+private fun ReflectPagePreview() {
+    ReflectTheme {
+        Scaffold { paddingValues ->
+            Box(modifier = Modifier.padding(paddingValues)) {
+                ReflectPage(
+                    state = ReflectPageState(
+                        reflect = Reflect(
+                            id = 1,
+                            title = "A Test Reflect",
+                            description = "Description for a test Reflect",
+                            reminder = LocalTime.now(),
+                            start = LocalDate.now(),
+                        ),
+                        filePaths = (0L..100L).associate {
+                            LocalDate.now().minusDays(it) to ""
+                        }
+                    ),
+                    action = {}
+                )
+            }
+        }
     }
 }

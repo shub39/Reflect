@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
@@ -62,7 +63,6 @@ fun ReflectEditDialog(
         onDismissRequest = onDismiss,
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.extraLarge
         ) {
             Column(
@@ -81,7 +81,6 @@ fun ReflectEditDialog(
                     onValueChange = { title = it },
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
-                        .fillMaxWidth()
                         .focusRequester(focusRequester),
                     singleLine = true,
                     label = { Text(stringResource(R.string.title)) }
@@ -91,13 +90,11 @@ fun ReflectEditDialog(
                     value = description,
                     onValueChange = { description = it },
                     shape = MaterialTheme.shapes.large,
-                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     label = { Text(stringResource(R.string.description)) }
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -105,6 +102,8 @@ fun ReflectEditDialog(
                         text = stringResource(R.string.reminder),
                         style = MaterialTheme.typography.bodyLarge
                     )
+
+                    Spacer(modifier = Modifier.padding(16.dp))
 
                     Switch(
                         checked = addReminder,
@@ -134,7 +133,6 @@ fun ReflectEditDialog(
 
                         onDismiss()
                     },
-                    modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.extraLarge,
                     enabled = isValidTitle(title) && description.isNotBlank() && description.length < 50
                 ) {

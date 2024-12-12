@@ -11,4 +11,10 @@ sealed interface Routes {
 
     @Serializable
     data object ReflectPage: Routes
+
+    @Serializable
+    data object SettingsGraph: Routes
+
+    @Serializable
+    data object SettingsMainPage: Routes
 }
