@@ -3,6 +3,7 @@ package com.shub39.reflect.di
 import com.shub39.reflect.reflect.data.database.ReflectDatabase
 import com.shub39.reflect.reflect.presentation.ReflectVM
 import com.shub39.reflect.reflect.data.repository.ReflectRepository
+import com.shub39.reflect.core.data.ReflectDataStore
 import com.shub39.reflect.reflect.domain.ReflectRepo
 import com.shub39.reflect.reflect.domain.Video
 import com.shub39.reflect.reflect.data.video.FFmpegHandler
@@ -18,6 +19,7 @@ val modules = module {
     // database
     single { ReflectDatabase.getDatabase(get()) }
     single { get<ReflectDatabase>().reflectDao() }
+    singleOf(::ReflectDataStore)
     singleOf(::ReflectRepository).bind<ReflectRepo>()
 
     //video stuff

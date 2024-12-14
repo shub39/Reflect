@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -27,6 +28,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,7 +42,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -113,178 +114,183 @@ fun ReflectPage(
         }
 
     } else {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(state.reflect.title)
-
-                        Text(
-                            text = state.reflect.description,
-                            style = MaterialTheme.typography.bodyLarge,
-                            maxLines = 3,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                }
-            )
-
-
-            // Information Chips
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 400.dp)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                AssistChip(
-                    onClick = {},
-                    label = { Text(text = state.reflect.start.format(DateTimeFormatter.ofPattern("dd/MM/yy"))) },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(R.drawable.round_flag_24),
-                            contentDescription = null
-                        )
+                TopAppBar(
+                    title = {
+                        Column {
+                            Text(state.reflect.title)
+
+                            Text(
+                                text = state.reflect.description,
+                                style = MaterialTheme.typography.bodyLarge,
+                                maxLines = 3,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = { editDialog = true }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.round_edit_24),
+                                contentDescription = null
+                            )
+                        }
                     }
                 )
 
-                if (state.reflect.reminder != null) {
+                // Information Chips
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    AssistChip(
+                        onClick = {},
+                        label = { Text(text = state.reflect.start.format(DateTimeFormatter.ofPattern("dd/MM/yy"))) },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.round_flag_24),
+                                contentDescription = null
+                            )
+                        }
+                    )
+
+                    if (state.reflect.reminder != null) {
+                        AssistChip(
+                            onClick = {},
+                            label = {
+                                Text(
+                                    text = state.reflect.reminder.format(
+                                        DateTimeFormatter.ofPattern(
+                                            "hh:mm a"
+                                        )
+                                    )
+                                )
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.round_access_alarm_24),
+                                    contentDescription = null
+                                )
+                            }
+                        )
+                    }
+
                     AssistChip(
                         onClick = {},
                         label = {
                             Text(
-                                text = state.reflect.reminder.format(
-                                    DateTimeFormatter.ofPattern(
-                                        "hh:mm a"
-                                    )
+                                text = state.reflect.lastUpdated.format(
+                                    DateTimeFormatter.ofPattern("dd/MM/yy")
                                 )
                             )
                         },
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(R.drawable.round_access_alarm_24),
+                                painter = painterResource(R.drawable.round_update_24),
                                 contentDescription = null
                             )
                         }
                     )
                 }
 
-                AssistChip(
-                    onClick = {},
-                    label = {
-                        Text(
-                            text = state.reflect.lastUpdated.format(
-                                DateTimeFormatter.ofPattern("dd/MM/yy")
-                            )
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(R.drawable.round_update_24),
-                            contentDescription = null
-                        )
-                    }
-                )
-            }
-
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (state.filePaths.isEmpty()) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.no_pictures),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-
-                LazyVerticalGrid(
-                    state = listState,
-                    columns = GridCells.Adaptive(150.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    items(state.filePaths.entries.toList()) {
-                        PageImage(it, 200)
-                    }
-                }
-
-                Column(
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                ) {
-                    AnimatedVisibility(
-                        visible = derivedState.value == 0,
-                        enter = fadeIn(),
-                        exit = fadeOut(),
-                    ) {
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    if (state.filePaths.isEmpty()) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            FloatingActionButton(
-                                onClick = {
-                                    pickMedia.launch(
-                                        PickVisualMediaRequest(
-                                            PickVisualMedia.ImageOnly
+                            Text(
+                                text = stringResource(R.string.no_pictures),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+
+                    LazyVerticalGrid(
+                        state = listState,
+                        columns = GridCells.Adaptive(100.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        items(state.filePaths.entries.toList()) {
+                            PageImage(it, 150)
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier.align(Alignment.BottomEnd)
+                    ) {
+                        AnimatedVisibility(
+                            visible = derivedState.value == 0,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                        ) {
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                FloatingActionButton(
+                                    onClick = {
+                                        pickMedia.launch(
+                                            PickVisualMediaRequest(
+                                                PickVisualMedia.ImageOnly
+                                            )
                                         )
-                                    )
-                                }
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.round_add_24),
-                                    contentDescription = null
-                                )
-                            }
-
-                            FloatingActionButton(
-                                onClick = { editDialog = true }
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.round_edit_24),
-                                    contentDescription = null
-                                )
-                            }
-
-                            FloatingActionButton(
-                                onClick = {
-                                    if (!state.isGenerating) {
-                                        action(ReflectPageAction.OnPlay)
                                     }
-
-                                    Toast.makeText(
-                                        context,
-                                        "Not implemented yet...",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                },
-                            ) {
-                                if (!state.isGenerating) {
+                                ) {
                                     Icon(
-                                        painter = painterResource(R.drawable.round_play_arrow_24),
+                                        painter = painterResource(R.drawable.round_add_24),
                                         contentDescription = null
                                     )
-                                } else {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(24.dp)
+                                }
+
+                                FloatingActionButton(
+                                    onClick = {
+                                        if (!state.isGenerating) {
+                                            action(ReflectPageAction.OnPlay)
+                                        }
+
+                                        Toast.makeText(
+                                            context,
+                                            "Not implemented yet...",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    },
+                                ) {
+                                    if (!state.isGenerating) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.round_play_arrow_24),
+                                            contentDescription = null
+                                        )
+                                    } else {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(24.dp)
+                                        )
+                                    }
+                                }
+
+                                FloatingActionButton(
+                                    onClick = { analyticsSheet = true }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.round_analytics_24),
+                                        contentDescription = null
                                     )
                                 }
-                            }
-
-                            FloatingActionButton(
-                                onClick = { analyticsSheet = true }
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.round_analytics_24),
-                                    contentDescription = null
-                                )
                             }
                         }
                     }

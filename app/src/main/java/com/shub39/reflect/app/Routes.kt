@@ -13,6 +13,12 @@ sealed interface Routes {
     data object ReflectPage: Routes
 
     @Serializable
+    data object PermissionPage: Routes
+
+    @Serializable
+    data object RefelectVideo: Routes
+
+    @Serializable
     data object SettingsGraph: Routes
 
     @Serializable

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -137,7 +136,7 @@ fun ReflectEditDialog(
                     enabled = isValidTitle(title) && description.isNotBlank() && description.length < 50
                 ) {
                     Text(
-                        text = stringResource(R.string.add)
+                        text = stringResource(R.string.done)
                     )
                 }
             }
