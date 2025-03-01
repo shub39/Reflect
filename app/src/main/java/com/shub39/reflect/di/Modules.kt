@@ -1,9 +1,13 @@
 package com.shub39.reflect.di
 
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.shub39.reflect.core.data.DatabaseFactory
+import com.shub39.reflect.core.data.DatastoreFactory
 import com.shub39.reflect.reflect.data.database.ReflectDatabase
 import com.shub39.reflect.reflect.presentation.ReflectVM
 import com.shub39.reflect.reflect.data.repository.ReflectRepository
-import com.shub39.reflect.core.data.ReflectDataStore
+import com.shub39.reflect.core.data.PrefDatastoreImpl
+import com.shub39.reflect.core.domain.PrefDatastore
 import com.shub39.reflect.reflect.domain.ReflectRepo
 import com.shub39.reflect.reflect.domain.Video
 import com.shub39.reflect.reflect.data.video.FFmpegHandler
@@ -16,10 +20,21 @@ val modules = module {
     // imageLoader
     single { provideImageLoader(get()) }
 
-    // database
-    single { ReflectDatabase.getDatabase(get()) }
+    // database, datastore and repository
+    singleOf(::DatabaseFactory)
+    single {
+        get<DatabaseFactory>()
+            .create()
+            .fallbackToDestructiveMigration(true)
+            .setDriver(BundledSQLiteDriver())
+            .build()
+    }
     single { get<ReflectDatabase>().reflectDao() }
-    singleOf(::ReflectDataStore)
+
+    singleOf(::DatastoreFactory)
+    single { get<DatastoreFactory>().getPreferencesDataStore() }
+    singleOf(::PrefDatastoreImpl).bind<PrefDatastore>()
+
     singleOf(::ReflectRepository).bind<ReflectRepo>()
 
     //video stuff
