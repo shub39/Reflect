@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.aboutLibraries)
 }
 
 val appName = "Reflect"
@@ -72,6 +73,11 @@ android {
     }
 }
 
+aboutLibraries {
+    // Remove the "generated" timestamp to allow for reproducible builds; from kaajjo/LibreSudoku
+    excludeFields = arrayOf("generated")
+}
+
 dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -94,6 +100,8 @@ dependencies {
     implementation(libs.materialKolor)
     implementation(libs.colorpicker.compose)
     implementation(libs.sqlite.bundled)
+    implementation(libs.datetime)
+    implementation(libs.aboutLibraries)
 }
 
 java {

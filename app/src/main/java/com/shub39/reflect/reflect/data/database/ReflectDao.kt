@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
@@ -19,7 +18,7 @@ interface ReflectDao {
     fun getReflects(): Flow<List<ReflectEntity>>
 
     @Upsert
-     suspend fun upsertReflect(reflect: ReflectEntity)
+    suspend fun upsertReflect(reflect: ReflectEntity)
 
     @Query("SELECT * FROM reflect WHERE id = :id")
     suspend fun getReflectById(id: Long): ReflectEntity
@@ -29,8 +28,5 @@ interface ReflectDao {
 
     @Delete
     suspend fun deleteReflect(reflect: ReflectEntity)
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateReflect(reflect: ReflectEntity)
 
 }

@@ -17,9 +17,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.*
-import com.shub39.reflect.R
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -28,10 +30,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.shub39.reflect.R
 import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.presentation.isValidTitle
-import java.time.LocalDate
-import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,17 +116,7 @@ fun ReflectAddDialog(
 
                 Button(
                     onClick = {
-                        onAdd(
-                            Reflect(
-                                title = title,
-                                description = description,
-                                start = LocalDate.now(),
-                                reminder = if (addReminder) LocalTime.of(
-                                    timePickerState.hour,
-                                    timePickerState.minute
-                                ) else null
-                            )
-                        )
+                        
 
                         onDismiss()
                     },

@@ -6,7 +6,6 @@ import com.shub39.reflect.reflect.domain.Reflect
 import com.shub39.reflect.reflect.domain.ReflectRepo
 import com.shub39.reflect.reflect.presentation.reflect_list.ReflectListAction
 import com.shub39.reflect.reflect.presentation.reflect_list.ReflectListState
-import com.shub39.reflect.reflect.presentation.reflect_list.toReflectUi
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPageAction
 import com.shub39.reflect.reflect.presentation.reflect_page.ReflectPageState
 import kotlinx.coroutines.Job
@@ -99,7 +98,7 @@ class ReflectVM(
             .onEach { reflects ->
                 _homeState.update { state ->
                     state.copy(
-                        reflects = reflects.map { it.toReflectUi() }
+                        reflects = reflects
                     )
                 }
             }

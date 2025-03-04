@@ -30,6 +30,7 @@ val modules = module {
             .build()
     }
     single { get<ReflectDatabase>().reflectDao() }
+    single { get<ReflectDatabase>().reflectImageDao() }
 
     singleOf(::DatastoreFactory)
     single { get<DatastoreFactory>().getPreferencesDataStore() }

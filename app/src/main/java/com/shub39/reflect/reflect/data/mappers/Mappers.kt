@@ -9,6 +9,7 @@ fun Reflect.toReflectEntity(): ReflectEntity {
         title = title,
         description = description,
         reminder = reminder,
+        daysOfWeek = daysOfWeek,
         start = start,
         lastUpdated = lastUpdated
     )
@@ -21,6 +22,7 @@ fun ReflectEntity.toReflect(): Reflect {
         description = description,
         reminder = reminder,
         start = start,
-        lastUpdated = lastUpdated
+        lastUpdated = lastUpdated,
+        daysOfWeek = daysOfWeek
     )
 }
