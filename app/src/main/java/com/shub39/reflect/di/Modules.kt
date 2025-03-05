@@ -4,7 +4,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.shub39.reflect.core.data.DatabaseFactory
 import com.shub39.reflect.core.data.DatastoreFactory
 import com.shub39.reflect.reflect.data.database.ReflectDatabase
-import com.shub39.reflect.reflect.presentation.ReflectVM
+import com.shub39.reflect.reflect.presentation.viewmodels.*
 import com.shub39.reflect.reflect.data.repository.ReflectRepository
 import com.shub39.reflect.core.data.PrefDatastoreImpl
 import com.shub39.reflect.core.domain.PrefDatastore
@@ -41,6 +41,9 @@ val modules = module {
     //video stuff
     singleOf(::FFmpegHandler).bind<Video>()
 
-    // viewmodel
-    viewModelOf(::ReflectVM)
+    // viewModels
+    singleOf(::StateLayer)
+    viewModelOf(::ReflectListViewModel)
+    viewModelOf(::ReflectPageViewModel)
+    viewModelOf(::SettingsPageViewModel)
 }

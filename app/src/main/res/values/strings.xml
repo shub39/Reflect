@@ -10,4 +10,6 @@
     <string name="no_pictures">No Pictures yet…</string>
     <string name="days_clicked">Days Clicked</string>
     <string name="done">Done</string>
+    <string name="settings">Settings</string>
+    <string name="app_theme">App Theme\n</string>
 </resources>
