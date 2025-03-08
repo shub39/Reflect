@@ -13,9 +13,9 @@ fun ReflectTheme(
     content: @Composable () -> Unit
 ) = DynamicMaterialTheme(
     seedColor = if (theme.materialTheme) {
-        theme.seedColor
-    } else {
         colorResource(android.R.color.system_accent1_200)
+    } else {
+        theme.seedColor
     },
     useDarkTheme = when (theme.appThemePref) {
         AppTheme.LIGHT -> false
@@ -23,6 +23,7 @@ fun ReflectTheme(
         AppTheme.SYSTEM -> isSystemInDarkTheme()
     },
     withAmoled = theme.withAmoled,
+    style = theme.style,
     typography = provideTypography(font = theme.font.fontId),
     content = content
 )

@@ -11,4 +11,5 @@ sealed interface SettingsPageAction {
     data class OnUpdateStyle(val style: PaletteStyle): SettingsPageAction
     data class OnUpdateMaterialPref(val pref: Boolean): SettingsPageAction
     data class OnUpdateFont(val font: Fonts): SettingsPageAction
+    data class OnUpdateAmoledPref(val pref: Boolean): SettingsPageAction
 }

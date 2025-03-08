@@ -37,6 +37,7 @@ class SettingsPageViewModel(
             is SettingsPageAction.OnUpdateSeedColor -> datastore.setSeedColor(action.color)
             is SettingsPageAction.OnUpdateStyle -> datastore.setStyle(action.style)
             is SettingsPageAction.OnUpdateAppTheme -> datastore.setAppTheme(action.appTheme)
+            is SettingsPageAction.OnUpdateAmoledPref -> datastore.setAmoled(action.pref)
         }
     }
 

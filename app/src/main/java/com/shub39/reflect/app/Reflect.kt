@@ -12,6 +12,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.shub39.reflect.core.presentation.theme.ReflectTheme
 import com.shub39.reflect.reflect.presentation.reflect_list.ReflectList
+import com.shub39.reflect.reflect.presentation.settings.LookAndFeelPage
 import com.shub39.reflect.reflect.presentation.settings.SettingsMainPage
 import com.shub39.reflect.reflect.presentation.viewmodels.ReflectListViewModel
 import com.shub39.reflect.reflect.presentation.viewmodels.ReflectPageViewModel
@@ -68,13 +69,15 @@ fun Reflect(
             ) {
                 composable<Routes.SettingsMainPage> {
                     SettingsMainPage(
-                        state = settingsState,
-                        action = settingsVM::onAction
+                        onNavLookAndFeel = { navController.navigate(Routes.LookAndFeel) }
                     )
                 }
 
                 composable<Routes.LookAndFeel> {
-
+                    LookAndFeelPage(
+                        state = settingsState,
+                        action = settingsVM::onAction
+                    )
                 }
             }
         }

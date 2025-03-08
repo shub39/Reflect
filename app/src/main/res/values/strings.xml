@@ -11,5 +11,14 @@
     <string name="days_clicked">Days Clicked</string>
     <string name="done">Done</string>
     <string name="settings">Settings</string>
-    <string name="app_theme">App Theme\n</string>
+    <string name="app_theme">App Theme</string>
+    <string name="look_and_feel">Look and feel</string>
+    <string name="amoled">Use Pure Black on Dark Mode</string>
+    <string name="amoled_desc">Best experienced on AMOLED diaplays</string>
+    <string name="material_you">Material You</string>
+    <string name="material_you_desc">Generate app palette from wallpaper colors</string>
+    <string name="seed_color">Seed Color</string>
+    <string name="seed_color_desc">Select base color to generate palette from</string>
+    <string name="palette_style">Select Palette Style</string>
+    <string name="look_and_feel_desc">Customise the app in various ways</string>
 </resources>
