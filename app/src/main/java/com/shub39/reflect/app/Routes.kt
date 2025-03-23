@@ -17,7 +17,9 @@ sealed interface Routes {
     @Serializable
     data object SettingsGraph: Routes
     @Serializable
-    data object SettingsMainPage: Routes
+    data object SettingsMain: Routes
     @Serializable
     data object LookAndFeel: Routes
+    @Serializable
+    data object About: Routes
 }

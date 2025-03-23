@@ -1,5 +1,6 @@
 package com.shub39.reflect.reflect.presentation.settings
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -23,7 +24,8 @@ import com.shub39.reflect.core.presentation.PageFill
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsMainPage(
-    onNavLookAndFeel: () -> Unit
+    onNavLookAndFeel: () -> Unit,
+    onNavAbout: () -> Unit
 ) = PageFill {
     Scaffold(
         modifier = Modifier
@@ -61,6 +63,30 @@ fun SettingsMainPage(
                         }
                     }
                 )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            text = stringResource(R.string.about)
+                        )
+                    },
+                    trailingContent = {
+                        IconButton(
+                            onClick = onNavAbout
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                contentDescription = "Navigate"
+                            )
+                        }
+                    }
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.padding(80.dp))
             }
         }
     }

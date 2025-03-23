@@ -51,7 +51,8 @@ fun Reflect(
                         state = state,
                         action = listVM::onAction,
                         onNavigateToPage = { navController.navigate(Routes.ReflectPage) },
-                        onNavigateToSettings = { navController.navigate(Routes.SettingsGraph) }
+                        onNavigateToSettings = { navController.navigate(Routes.SettingsGraph) },
+                        onNavigateToAdd = {  }
                     )
                 }
 
@@ -65,11 +66,12 @@ fun Reflect(
             }
 
             navigation<Routes.SettingsGraph>(
-                startDestination = Routes.SettingsMainPage
+                startDestination = Routes.SettingsMain
             ) {
-                composable<Routes.SettingsMainPage> {
+                composable<Routes.SettingsMain> {
                     SettingsMainPage(
-                        onNavLookAndFeel = { navController.navigate(Routes.LookAndFeel) }
+                        onNavLookAndFeel = { navController.navigate(Routes.LookAndFeel) },
+                        onNavAbout = { navController.navigate(Routes.About) }
                     )
                 }
 
@@ -78,6 +80,10 @@ fun Reflect(
                         state = settingsState,
                         action = settingsVM::onAction
                     )
+                }
+
+                composable<Routes.About> {
+
                 }
             }
         }

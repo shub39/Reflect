@@ -13,9 +13,3 @@ Currently the following features are planned:
 
 > [!NOTE]
 > If you are interested in collaborating, discussing or becoming a beta tester, ping me at telegram or discord `@shub39`
-
-## Screenshots ✨
-
-| ![1](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png) | ![2](fastlane/metadata/android/en-US/images/phoneScreenshots/2.png) |
-|:-------------------------------------------------------------------:|:-------------------------------------------------------------------:|
-| ![3](fastlane/metadata/android/en-US/images/phoneScreenshots/3.png) | ![3](fastlane/metadata/android/en-US/images/phoneScreenshots/4.png) |

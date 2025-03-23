@@ -9,7 +9,7 @@ import com.shub39.reflect.core.domain.Theme
 
 @Composable
 fun ReflectTheme(
-    theme: Theme,
+    theme: Theme = Theme(),
     content: @Composable () -> Unit
 ) = DynamicMaterialTheme(
     seedColor = if (theme.materialTheme) {
