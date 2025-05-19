@@ -1,10 +1,10 @@
-package com.shub39.reflect.presentation.util
+package com.shub39.reflekt.presentation.util
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.materialkolor.DynamicMaterialTheme
-import com.shub39.reflect.domain.AppTheme
-import com.shub39.reflect.domain.Theme
+import com.shub39.reflekt.domain.AppTheme
+import com.shub39.reflekt.domain.Theme
 
 @Composable
 fun ReflectTheme(

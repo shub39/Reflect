@@ -14,8 +14,8 @@ plugins {
     alias(libs.plugins.hotreload)
 }
 
-val appName = "Reflect"
-val appPackageName = "com.shub39.reflect"
+val appName = "Reflekt"
+val appPackageName = "com.shub39.reflekt"
 val appVersionName = "1.0.0"
 val appVersionCode = 1000
 
@@ -147,7 +147,7 @@ java {
 
 compose.desktop {
     application {
-        mainClass = "com.shub39.reflect.MainKt"
+        mainClass = "com.shub39.reflekt.MainKt"
     }
 }
 
@@ -156,5 +156,5 @@ composeCompiler {
 }
 
 tasks.register<ComposeHotRun>("runHot") {
-    mainClass.set("com.shub39.reflect.MainKt")
+    mainClass.set("com.shub39.reflekt.MainKt")
 }

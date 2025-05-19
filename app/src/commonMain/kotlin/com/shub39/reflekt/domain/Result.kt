@@ -1,10 +1,10 @@
-package com.shub39.reflect.domain
+package com.shub39.reflekt.domain
 
 interface Error
 
 sealed interface Result<out D, out E: Error> {
     data class Success<out D>(val data: D): Result<D, Nothing>
-    data class Error<out E: com.shub39.reflect.domain.Error>(val error: E):
+    data class Error<out E: com.shub39.reflekt.domain.Error>(val error: E):
         Result<Nothing, E>
 }
 

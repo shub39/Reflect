@@ -1,4 +1,4 @@
-package com.shub39.reflect
+package com.shub39.reflekt
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

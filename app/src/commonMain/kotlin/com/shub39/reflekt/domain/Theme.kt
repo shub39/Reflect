@@ -1,4 +1,4 @@
-package com.shub39.reflect.domain
+package com.shub39.reflekt.domain
 
 import androidx.compose.ui.graphics.Color
 import com.materialkolor.PaletteStyle

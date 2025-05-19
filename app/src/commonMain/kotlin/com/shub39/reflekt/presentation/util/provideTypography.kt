@@ -1,4 +1,4 @@
-package com.shub39.reflect.presentation.util
+package com.shub39.reflekt.presentation.util
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
@@ -8,8 +8,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.FontResource
-import reflect.app.generated.resources.Res
-import reflect.app.generated.resources.inter
+import reflekt.app.generated.resources.Res
+import reflekt.app.generated.resources.inter
 
 @Composable
 fun provideTypography(

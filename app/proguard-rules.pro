@@ -1,2 +1,2 @@
 -dontobfuscate
--keep class com.shub39.reflect.** { *; }
+-keep class com.shub39.reflekt.** { *; }

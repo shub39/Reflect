@@ -1,4 +1,4 @@
-# Reflect 
+# Reflekt 
 
 ### An android app to track your progress on anything using montages.
 
