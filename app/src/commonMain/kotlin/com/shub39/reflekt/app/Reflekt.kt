@@ -7,6 +7,6 @@ import com.shub39.reflekt.presentation.util.ReflectTheme
 @Composable
 fun Reflekt() {
     ReflectTheme {
-        Text("Reflect")
+        Text("Reflekt")
     }
 }
