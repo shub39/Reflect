@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.shub39.reflect.app.Reflect
 import org.koin.compose.KoinContext
 
 class MainActivity : ComponentActivity() {
